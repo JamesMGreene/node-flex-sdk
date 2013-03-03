@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/JamesMGreene/node-mxmlc-install.png)](https://travis-ci.org/JamesMGreene/node-mxmlc-install)
+
 # mxmlc-install
 
 An NPM wrapper for the [Adobe Flex SDK Compiler, `mxmlc`][flex/devcenter].
