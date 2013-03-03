@@ -1,0 +1,60 @@
+{
+  "name": "mxmlc-install",
+  "description": "A Node.js module to download and \"install\" the latest Adobe Open Source Flex SDK.",
+  "version": "3.6.0",
+  "flexSdk": {
+    "url": "http://fpdownload.adobe.com/pub/flex/sdk/builds/flex3/flex_sdk_3.6.0.16995A_mpl.zip"
+  },
+  "homepage": "https://github.com/JamesMGreene/node-mxmlc-install",
+  "author": {
+    "name": "James M. Greene",
+    "email": "james.m.greene@gmail.com",
+    "url": "http://jamesgreene.net/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/JamesMGreene/node-mxmlc-install.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JamesMGreene/node-mxmlc-install/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/JamesMGreene/node-mxmlc-install/blob/master/LICENSE-MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "main": "lib/mxmlc",
+  "bin": {
+    "mxmlc": "./bin/mxmlc"
+  },
+  "scripts": {
+    "install": "node install.js",
+    "test": "grunt travis --verbose"
+  },
+  "dependencies": {
+    "rimraf": "~2.0.2",
+    "unzip": "~0.1.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-nodeunit": "~0.1.2",
+    "grunt": "~0.4.0"
+  },
+  "keywords": [
+    "install",
+    "adobe",
+    "flex sdk",
+    "open source",
+    "compiler",
+    "flex",
+    "mxml",
+    "actionscript",
+    "flv",
+    "flash",
+    "air"
+  ]
+}
