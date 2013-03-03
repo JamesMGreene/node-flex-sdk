@@ -1,9 +1,9 @@
 {
   "name": "mxmlc-install",
   "description": "A Node.js module to download and \"install\" the latest Adobe Open Source Flex SDK.",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "flexSdk": {
-    "url": "http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4.5/flex_sdk_4.5.0.20967A_mpl.zip"
+    "url": "http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4.5/flex_sdk_4.5.1.21328A_mpl.zip"
   },
   "homepage": "https://github.com/JamesMGreene/node-mxmlc-install",
   "author": {

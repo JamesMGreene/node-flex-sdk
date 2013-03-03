@@ -86,6 +86,8 @@ using [Grunt][grunt/site].
 
 
 ## Release History
+ - 4.5.1: Published to NPM on 2013-03-03.
+    - Release targeting Adobe Flex SDK v4.5.1.
  - 4.5.0: Published to NPM on 2013-03-03.
     - Release targeting Adobe Flex SDK v4.5.0.
  - 4.1.0: Published to NPM on 2013-03-03.
