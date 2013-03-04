@@ -89,7 +89,7 @@ function finishIt(err, stdout, stderr) {
     // Ensure that the binaries are user-executable (problems with unzip library)
     if (process.platform !== 'win32') {
       Object.keys(flexSdk.bin).forEach(function(binKey) {
-        var binaryPath = path.join(flexSdk.binDir, flexSdk.bin[binKey]);
+        var binaryPath = flexSdk.bin[binKey];
         var stat = fs.statSync(binaryPath);
         // 64 == 0100 (no octal literal in strict mode)
         if (!(stat.mode & 64)) {
