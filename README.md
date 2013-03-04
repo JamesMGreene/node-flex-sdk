@@ -90,6 +90,8 @@ using [Grunt][grunt/site].
 
 
 ## Release History
+ - 4.9.1: Published to NPM on 2013-03-04.
+    - Release targeting Apache Flex SDK v4.9.1.
  - 4.9.0: Published to NPM on 2013-03-04.
     - Release targeting Apache Flex SDK v4.9.0.
  - 4.6.0: Published to NPM on 2013-03-04.
