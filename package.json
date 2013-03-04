@@ -1,11 +1,11 @@
 {
-  "name": "mxmlc-install",
-  "description": "A Node.js module to download and \"install\" the latest Adobe Open Source Flex SDK.",
-  "version": "4.6.0",
+  "name": "flex",
+  "description": "A Node.js module to download and \"install\" the latest open source Apache/Adobe Flex SDK.",
+  "version": "3.0.0",
   "flexSdk": {
-    "url": "http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4.6/flex_sdk_4.6.0.23201_mpl.zip"
+    "url": "http://fpdownload.adobe.com/pub/flex/sdk/builds/flex3/flex_sdk_3.0.0.477A_mpl.zip"
   },
-  "homepage": "https://github.com/JamesMGreene/node-mxmlc-install",
+  "homepage": "https://github.com/JamesMGreene/node-flex",
   "author": {
     "name": "James M. Greene",
     "email": "james.m.greene@gmail.com",
@@ -13,21 +13,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/JamesMGreene/node-mxmlc-install.git"
+    "url": "git://github.com/JamesMGreene/node-flex.git"
   },
   "bugs": {
-    "url": "https://github.com/JamesMGreene/node-mxmlc-install/issues"
+    "url": "https://github.com/JamesMGreene/node-flex/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/JamesMGreene/node-mxmlc-install/blob/master/LICENSE-MIT"
+      "url": "https://github.com/JamesMGreene/node-flex/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {
     "node": ">= 0.8.0"
   },
-  "main": "lib/mxmlc",
+  "main": "lib/flex",
   "bin": {
     "mxmlc": "./bin/mxmlc"
   },
@@ -45,7 +45,9 @@
     "grunt": "~0.4.0"
   },
   "keywords": [
+    "download",
     "install",
+    "apache",
     "adobe",
     "flex sdk",
     "open source",

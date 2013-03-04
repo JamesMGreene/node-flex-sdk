@@ -9,7 +9,7 @@ var path = require('path');
 
 fs.existsSync = fs.existsSync || path.existsSync;
 
-var binPath = require('../lib/mxmlc').path;
+var flexSdk = require('../lib/flex');
 
 var safeDelete = function(path) {
   if (fs.existsSync(path)) {
@@ -24,16 +24,21 @@ var safeDelete = function(path) {
 
 module.exports = {
 
-  testDownload: function(test) {
-    test.expect(1);
+  testDownloadAndSdkExposure: function(test) {
+    test.expect(8);
 
-    var value = fs.existsSync(binPath);
-
-    test.ok(value, 'should download and extract proper binary');
+    test.ok(flexSdk.binDir, 'should have binary directory path set');
+    test.ok(fs.existsSync(flexSdk.binDir), 'should have binary directory path equal to an existing item');
+    test.ok(fs.statSync(flexSdk.binDir).isDirectory(), 'should have binary directory path equal to an existing DIRECTORY');
+    test.ok(flexSdk.bin, 'should have bin mapping object');
+    test.ok(Object.keys(flexSdk.bin).length > 0, 'should have at least 1 bin mapping entry');
+    test.ok(flexSdk.bin.mxmlc, 'should have bin mapping entry for `mxmlc`');
+    test.ok(fs.existsSync(flexSdk.bin.mxmlc), 'should have binary for `mxmlc` equal to an existing item');
+    test.ok(fs.statSync(flexSdk.bin.mxmlc).isFile(), 'should have binary for `mxmlc` equal to an existing FILE');
 
     test.done();
   },
-  
+
   testCompileSuccess: {
     setUp: function(done) {
       // Delete the binary
@@ -52,16 +57,16 @@ module.exports = {
 
       var targetSource = path.join(__dirname, 'testData', 'testApp.as');
       var targetBinary = path.join(__dirname, 'testData', 'testApp.swf');
-      
+
       var childArgs = [
         '+configname=air',
         targetSource
       ];
 
-      childProcess.execFile(binPath, childArgs, function(err, stdout, stderr) {
+      childProcess.execFile(flexSdk.bin.mxmlc, childArgs, function(err, stdout, stderr) {
         var stdoutLower = stdout.toLowerCase();
         var stderrLower = stderr.toLowerCase();
-        
+
         var noFailures = stdoutLower.indexOf('fail') === -1 && stderrLower.indexOf('fail') === -1;
         var noErrors = stdoutLower.indexOf('error') === -1 && stderrLower.indexOf('error') === -1;
         var containsSwfPath;
@@ -72,7 +77,7 @@ module.exports = {
         else {
           containsSwfPath = stdout.indexOf(targetBinary) !== -1;
         }
-        
+
         test.ok(noFailures, 'should compile the target successfully without failures');
         test.ok(noErrors, 'should compile the target successfully without errors');
         test.ok(containsSwfPath, 'should compile the target successfully and show path to output binary');
@@ -101,16 +106,16 @@ module.exports = {
 
       var targetSource = path.join(__dirname, 'testData', 'errorApp.as');
       var targetBinary = path.join(__dirname, 'testData', 'errorApp.swf');
-      
+
       var childArgs = [
         '+configname=air',
         targetSource
       ];
 
-      childProcess.execFile(binPath, childArgs, function(err, stdout, stderr) {
+      childProcess.execFile(flexSdk.bin.mxmlc, childArgs, function(err, stdout, stderr) {
         var stdoutLower = stdout.toLowerCase();
         var stderrLower = stderr.toLowerCase();
-        
+
         var hadFailures = stdoutLower.indexOf('fail') !== -1 || stderrLower.indexOf('fail') !== -1;
         var hadErrors = stdoutLower.indexOf('error') !== -1 || stderrLower.indexOf('error') !== -1;
         var containsSwfPath;
@@ -121,7 +126,7 @@ module.exports = {
         else {
           containsSwfPath = stdout.indexOf(targetBinary) !== -1;
         }
-        
+
         test.ok(hadFailures || hadErrors, 'should fail to compile the target with either failures or errors');
         test.ok(!containsSwfPath, 'should not show path to output binary');
         test.ok(!fs.existsSync(targetBinary), 'compiled output binary should not exist');

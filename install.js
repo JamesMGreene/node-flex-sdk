@@ -1,29 +1,36 @@
 /*
- * mxmlc-install
- * https://github.com/JamesMGreene/node-mxmlc-install
+ * flex
+ * https://github.com/JamesMGreene/node-flex
  *
  * Copyright (c) 2013 James M. Greene
  * Licensed under the MIT license.
  */
 
 /*
- * This simply fetches the requested version of mxmlc (via an Adobe Flex SDK).
+ * This simply downloads the requested version of the Adobe Flex SDK.
  */
 
 'use strict';
 
-var cp = require('child_process');
 var fs = require('fs');
-var http = require('http');
 var path = require('path');
+fs.existsSync = fs.existsSync || path.existsSync;
 var url = require('url');
+var http = require('http');
+var cp = require('child_process');
 var rimraf = require('rimraf').sync;
 var unzip = require('unzip');
 var pkgMeta = require('./package.json');
 
-var helper = require('./lib/mxmlc');
+// IMPORTANT:
+// This `require` call MUST be done post-download because the export of this 
+// module is dynamically created based on the executables present after
+// downloading and unzipping the relevant Flex SDK.
+// If the `require` call is done prior to the download completing, then the
+// module's `refresh` function must be invoked afterward to establish the
+// correct list of available binaries.
+var flexSdk = require('./lib/flex');
 
-fs.existsSync = fs.existsSync || path.existsSync;
 
 var libPath = path.join(__dirname, 'lib', 'flex_sdk');
 var tmpPath = path.join(__dirname, 'tmp');
@@ -76,19 +83,25 @@ function finishIt(err, stdout, stderr) {
       return;
     }
 
-    // Check that the binary is user-executable and fix it if it isn't (problems with unzip library)
+    // Start utilizing the API by refreshing its binary cache
+    flexSdk.refresh();
+
+    // Ensure that the binaries are user-executable (problems with unzip library)
     if (process.platform !== 'win32') {
-      var stat = fs.statSync(helper.path);
-      // 64 == 0100 (no octal literal in strict mode)
-      if (!(stat.mode & 64)) {
-        console.log('Fixing file permissions');
-        fs.chmodSync(helper.path, '755');
-      }
+      Object.keys(flexSdk.bin).forEach(function(binKey) {
+        var binaryPath = path.join(flexSdk.binDir, flexSdk.bin[binKey]);
+        var stat = fs.statSync(binaryPath);
+        // 64 == 0100 (no octal literal in strict mode)
+        if (!(stat.mode & 64)) {
+          console.log('Fixing file permissions for: ' + binaryPath);
+          fs.chmodSync(binaryPath, '755');
+        }
+      });
     }
 
     rimraf(tmpPath);
 
-    console.log('Done. mxmlc binary available at:\n' + helper.path);
+    console.log('Done. The Flex SDK binaries are available at:\n  ' + flexSdk.binDir);
   }
 }
 
