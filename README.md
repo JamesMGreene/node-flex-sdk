@@ -90,6 +90,8 @@ using [Grunt][grunt/site].
 
 
 ## Release History
+ - 3.1.0: Published to NPM on 2013-03-04.
+    - Release targeting Adobe Flex SDK v3.1.0.
  - 3.0.1: Published to NPM on 2013-03-04.
     - Release targeting Adobe Flex SDK v3.0.1.
  - 3.0.0: Published to NPM on 2013-03-04.
