@@ -126,7 +126,7 @@ module.exports = {
         '+configname=air',
         targetSource
       ];
-      
+
       // Hack for non-Windows boxes
       if (process.platform !== 'win32') {
         childArgs.unshift(executable);
@@ -187,7 +187,7 @@ module.exports = {
         '+configname=air',
         targetSource
       ];
-      
+
       // Hack for non-Windows boxes
       if (process.platform !== 'win32') {
         childArgs.unshift(executable);

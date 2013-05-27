@@ -12,6 +12,7 @@
 
 'use strict';
 
+var DEBUG_TRAVIS = false;
 var os = require('os');
 var fs = require('fs');
 var path = require('path');
@@ -105,15 +106,17 @@ function fixLineEndings() {
       // Next!
       finishIt();
     });
-    
+
   // DEBUGGING
-  ['start', 'processing.start', 'processing.skip', 'convert.start', 'convert.end', 'processing.end'].forEach(function(e) {
-    dos2unix.on(e, function() {
-      var args = [].slice.call(arguments, 0);
-      console.log('[DEBUG] dos2unix event: ' + JSON.stringify({ 'type': e, 'args': args }, null, '  '));
+  if (DEBUG_TRAVIS) {
+    ['start', 'processing.start', 'processing.skip', 'convert.start', 'convert.end', 'processing.end'].forEach(function(e) {
+      dos2unix.on(e, function() {
+        var args = [].slice.call(arguments, 0);
+        console.log('[DEBUG] dos2unix event: ' + JSON.stringify({ 'type': e, 'args': args }, null, '  '));
+      });
     });
-  });
-  
+  }
+
   dos2unix.process(['**/*']);
 }
 
@@ -131,7 +134,7 @@ function finishIt() {
       process.exit(1);
       return;
     }
-    
+
     // Verify that files exist in `libPath` now
     fs.readdir(libPath, function(err, files) {
       if (err) {
@@ -144,7 +147,7 @@ function finishIt() {
         process.exit(1);
         return;
       }
-    
+
       // Start utilizing the API by refreshing its binary cache
       flexSdk.refresh();
 
@@ -189,7 +192,7 @@ function extractIt() {
     console.log('Exploding ZIP: ' + downloadedFile);
     var zip = new AdmZip(downloadedFile);
     zip.extractAllTo(tmpExtractionsPath, true);
-  
+
     // Delete the ZIP file - Don't do this anymore as we preferred to leverage existing downloaded copies!
     //fs.unlinkSync(downloadedFile);
 
