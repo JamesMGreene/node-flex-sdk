@@ -47,6 +47,11 @@ var downloadUrl = pkgMeta.flexSdk.url;
 var fileName = downloadUrl.split('/').pop();
 var downloadedFile = path.join(tmpDownloadsPath, fileName);
 
+process.on('uncaughtException', function(err) {
+  console.error('FATAL! Uncaught exception: ' + err);
+  process.exit(1);
+});
+
 function getOptions() {
   var downloadUrlParts = url.parse(downloadUrl);
   if (process.env.http_proxy) {
@@ -106,7 +111,9 @@ function fixLineEndings(err) {
 function finishIt(stats) {
   console.log('dos2unix conversion stats: ' + JSON.stringify(stats));
 
-  rimraf(libPath);
+  if (fs.existsSync(libPath)) {
+    rimraf(libPath);
+  }
   mkdirp(libPath);
 
   // Move the contents, if there are files left
@@ -150,13 +157,15 @@ function finishIt(stats) {
       // Declare victory!
       console.log('SUCCESS! The Flex SDK binaries are available at:\n  ' + flexSdk.binDir);
 
-      rimrafAsync(tmpExtractionsPath, function(err) {
-        if (err) {
-          console.log('\nWARNING: Could not delete the temporary directory but that is OK.\n' +
-            'The next `npm install flex-sdk` should take care of that!\n' +
-            'Root cause: ' + err);
-        }
-      });
+      if (fs.existsSync(tmpExtractionsPath)) {
+        rimrafAsync(tmpExtractionsPath, function(err) {
+          if (err) {
+            console.log('\nWARNING: Could not delete the temporary directory but that is OK.\n' +
+              'The next `npm install flex-sdk` should take care of that!\n' +
+              'Root cause: ' + err);
+          }
+        });
+      }
     });
   });
 }
@@ -164,7 +173,9 @@ function finishIt(stats) {
 function extractIt() {
   console.log('Extracting contents from the ZIP...');
 
-  rimraf(tmpExtractionsPath);
+  if (fs.existsSync(tmpExtractionsPath)) {
+    rimraf(tmpExtractionsPath);
+  }
   mkdirp(tmpExtractionsPath);
 
   var err;
@@ -212,8 +223,10 @@ function downloadIt() {
   var notifiedCount = 0;
   var count = 0;
 
-  // Do NOT:
-  //rimraf(tmpDownloadsPath);
+  // Do NOT do:
+  //if (fs.existsSync(tmpDownloadsPath)) {
+  //  rimraf(tmpDownloadsPath);
+  //}
 
   mkdirp(tmpDownloadsPath);
 
