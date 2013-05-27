@@ -105,6 +105,15 @@ function fixLineEndings() {
       // Next!
       finishIt();
     });
+    
+  // DEBUGGING
+  ['start', 'processing.start', 'processing.skip', 'convert.start', 'convert.end', 'processing.end'].forEach(function(e) {
+    dos2unix.on(e, function() {
+      var args = [].slice.call(arguments, 0);
+      console.log('[DEBUG] dos2unix event: ' + JSON.stringify({ 'type': e, 'args': args }, null, '  '));
+    });
+  });
+  
   dos2unix.process(['**/*']);
 }
 
