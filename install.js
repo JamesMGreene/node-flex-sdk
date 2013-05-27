@@ -12,14 +12,19 @@
 
 'use strict';
 
+var os = require('os');
 var fs = require('fs');
 var path = require('path');
 fs.existsSync = fs.existsSync || path.existsSync;
 var url = require('url');
 var http = require('http');
 var cp = require('child_process');
-var rimraf = require('rimraf').sync;
-var unzip = require('unzip');
+var rimrafAsync = require('rimraf')
+var rimraf = rimrafAsync.sync;
+var mkdirp = require('mkdirp').sync;
+var AdmZip = require('adm-zip');
+var D2UConverter = require('dos2unix').dos2unix;
+var copyR = require('ncp').ncp;
 var pkgMeta = require('./package.json');
 
 // IMPORTANT:
@@ -33,99 +38,184 @@ var flexSdk = require('./lib/flex');
 
 
 var libPath = path.join(__dirname, 'lib', 'flex_sdk');
-var tmpPath = path.join(__dirname, 'tmp');
+var tmpDir = (typeof os.tmpdir === 'function') ? os.tmpdir() : os.tmpDir();
+var tmpPath = path.join(tmpDir, 'flex_sdk');
+var tmpDownloadsPath = path.join(tmpPath, 'downloads');
+var tmpExtractionsPath = path.join(tmpPath, 'extractions');
 
 var downloadUrl = pkgMeta.flexSdk.url;
 var fileName = downloadUrl.split('/').pop();
-var downloadedFile = path.join(tmpPath, fileName);
-
-function mkdir(name) {
-  var dir = path.dirname(name);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
-  }
-}
+var downloadedFile = path.join(tmpDownloadsPath, fileName);
 
 function getOptions() {
+  var downloadUrlParts = url.parse(downloadUrl);
   if (process.env.http_proxy) {
-    var options = url.parse(process.env.http_proxy);
+    var options = url.parse(process.env.http_proxy, false, true);
     options.path = downloadUrl;
-    options.headers = { Host: url.parse(downloadUrl).host };
+    options.headers = { Host: downloadUrlParts.host };
     return options;
   }
-  else {
-    return url.parse(downloadUrl);
-  }
+  return downloadUrlParts;
 }
 
-function finishIt(err, stdout, stderr) {
+function fixLineEndings(err) {
   if (err) {
-    console.log('Error extracting archive:\n' + err);
+    console.error('Error extracting archive:\n' + err);
     process.exit(1);
   }
-  else {
-    // Delete the ZIP file
-    fs.unlinkSync(downloadedFile);
 
-    // Move the contents, if there are files left
-    var files = fs.readdirSync(tmpPath);
-    var wasRenamed = false;
-    if (files.length) {
-      console.log('Renaming extracted folder -> flex_sdk');
-      fs.renameSync(tmpPath, libPath);
-      wasRenamed = true;
+  // Convert all DOS line endings (CrLf) to UNIX line endings (Lf)
+  var globOptions = {
+    glob: {
+      cwd: tmpExtractionsPath
     }
+  };
+  var conversionEndedAlready = false;
+  var errors = [];
+  var dos2unix = new D2UConverter(globOptions)
+    .on('convert.error', function(err) {
+      err.type = 'convert.error';
+      errors.push(err);
+    })
+    .on('processing.error', function(err) {
+      err.type = 'processing.error';
+      errors.push(err);
+    })
+    .on('error', function(err) {
+      console.error('Critical error while fixing line endings:\n' + (err.stack || err));
+      if (!conversionEndedAlready) {
+        if (errors.length) {
+          fs.writeFileSync(path.join(__dirname, 'install.log'), JSON.stringify(errors, null, "  "));
+          console.error('There were errors during the dos2unix process. Check "install.log" for more details!');
+        }
+        console.error('Exiting prematurely...');
+        process.exit(1);
+      }
+    })
+    .on('end', function(stats) {
+      conversionEndedAlready = true;
+      if (errors.length) {
+        fs.writeFileSync(path.join(__dirname, 'install.log'), JSON.stringify(errors, null, "  "));
+        console.error('There were errors during the dos2unix process. Check "install.log" for more details!');
+      }
+      finishIt(stats);
+    });
+  dos2unix.process(['**/*']);
+}
 
+function finishIt(stats) {
+  console.log('dos2unix conversion stats: ' + JSON.stringify(stats));
+
+  rimraf(libPath);
+  mkdirp(libPath);
+
+  // Move the contents, if there are files left
+  copyR(tmpExtractionsPath, libPath, function(err) {
     // For isolating extraction problems
-    if (!wasRenamed) {
-      console.log('Temporary files not renamed, maybe zip extraction failed.');
+    if (err) {
+      console.error('Temporary files not copied to their final destination!\nError: ' + err);
       process.exit(1);
       return;
     }
+    
+    // Verify that files exist in `libPath` now
+    fs.readdir(libPath, function(err, files) {
+      if (err) {
+        console.error('Cannot verify that temporary files were copied to their final destination!\nError: ' + err);
+        process.exit(1);
+        return;
+      }
+      if (!files.length) {
+        console.error('Temporary files were not copied to their final destination!');
+        process.exit(1);
+        return;
+      }
+    
+      // Start utilizing the API by refreshing its binary cache
+      flexSdk.refresh();
 
-    // Start utilizing the API by refreshing its binary cache
-    flexSdk.refresh();
+      // Ensure that the binaries are user-executable (problems with unzip library)
+      if (process.platform !== 'win32') {
+        Object.keys(flexSdk.bin).forEach(function(binKey) {
+          var binaryPath = flexSdk.bin[binKey];
+          var stat = fs.statSync(binaryPath);
+          // 64 === 0100 (no octal literal in strict mode)
+          if (!(stat.mode & 64)) {
+            console.log('Fixing file permissions for: ' + binaryPath);
+            fs.chmodSync(binaryPath, '755');
+          }
+        });
+      }
 
-    // Ensure that the binaries are user-executable (problems with unzip library)
-    if (process.platform !== 'win32') {
-      Object.keys(flexSdk.bin).forEach(function(binKey) {
-        var binaryPath = flexSdk.bin[binKey];
-        var stat = fs.statSync(binaryPath);
-        // 64 == 0100 (no octal literal in strict mode)
-        if (!(stat.mode & 64)) {
-          console.log('Fixing file permissions for: ' + binaryPath);
-          fs.chmodSync(binaryPath, '755');
+      // Declare victory!
+      console.log('SUCCESS! The Flex SDK binaries are available at:\n  ' + flexSdk.binDir);
+
+      rimrafAsync(tmpExtractionsPath, function(err) {
+        if (err) {
+          console.log('\nWARNING: Could not delete the temporary directory but that is OK.\n' +
+            'The next `npm install flex-sdk` should take care of that!\n' +
+            'Root cause: ' + err);
         }
       });
-    }
-
-    rimraf(tmpPath);
-
-    console.log('Done. The Flex SDK binaries are available at:\n  ' + flexSdk.binDir);
-  }
+    });
+  });
 }
 
 function extractIt() {
-  console.log('Extracting zip contents...');
+  console.log('Extracting contents from the ZIP...');
 
-  var unzipStream = unzip.Extract({ path: path.dirname(downloadedFile) });
-  unzipStream.on('error', finishIt);
-  unzipStream.on('close', finishIt);
+  rimraf(tmpExtractionsPath);
+  mkdirp(tmpExtractionsPath);
 
-  var readStream = fs.createReadStream(downloadedFile);
-  readStream.pipe(unzipStream);
-  readStream.on('error', finishIt);
-  readStream.on('close', function() { console.log('Read stream closed.'); });
+  var err;
+  try {
+    var zip = new AdmZip(downloadedFile);
+    zip.extractAllTo(tmpExtractionsPath, true);
+  
+    // Delete the ZIP file - Don't do this anymore as we preferred to leverage existing downloaded copies!
+    //fs.unlinkSync(downloadedFile);
+  }
+  catch (e) {
+    err = e;
+  }
+
+  fixLineEndings(err);
 }
 
 function fetchIt() {
+  // Check if we already have the right ZIP and if it's the correct size
+  if (fs.existsSync(downloadedFile)) {
+    console.log('It appears that the desired ZIP file is already downloaded. Verifying file size...');
+    var localFileSize = parseInt(fs.statSync(downloadedFile).size, 10);
+    var opts = getOptions();
+    opts.method = 'HEAD';
+    var req = http.request(opts, function(res) {
+      // This might not work if the remote content is served GZIP-ed
+      var remoteFileSize = parseInt(res.headers['content-length'] || -1, 10);
+      if (localFileSize === remoteFileSize) {
+        console.log('Woohoo, the local file size matched the remote file size (both: ' + localFileSize + ')! Skipping download.');
+        extractIt();
+      }
+      else {
+        console.log('Darn, the local file size (' + localFileSize + ') did not match the remote file size (' + remoteFileSize + '). Proceeding to download...');
+        downloadIt();
+      }
+    });
+    req.end();
+  }
+  else {
+    downloadIt();
+  }
+}
+
+function downloadIt() {
   var notifiedCount = 0;
   var count = 0;
 
-  rimraf(tmpPath);
-  rimraf(libPath);
+  // Do NOT:
+  //rimraf(tmpDownloadsPath);
 
-  mkdir(downloadedFile);
+  mkdirp(tmpDownloadsPath);
 
   var outFile = fs.openSync(downloadedFile, 'w');
 
@@ -139,7 +229,7 @@ function fetchIt() {
   }
 
   function onEnd() {
-    console.log('Received ' + Math.floor(count / 1024) + 'KB total.');
+    console.log('Received ' + Math.floor(count / 1024) + 'KB total!');
     fs.closeSync(outFile);
     extractIt();
   }
@@ -149,18 +239,18 @@ function fetchIt() {
     console.log('Receiving...');
 
     if (status === 200) {
-      response.addListener('data', onData);
-      response.addListener('end', onEnd);
+      response.on('data', onData);
+      response.on('end', onEnd);
     }
     else {
-      console.log('Error with HTTP request:\n' + response.headers);
+      console.log('Error with HTTP request:\n' + JSON.stringify(response.headers));
       client.abort();
       process.exit(1);
     }
   }
 
   var client = http.get(getOptions(), onResponse);
-  console.log('Requesting ' + downloadedFile);
+  console.log('Requesting ' + downloadUrl);
 }
 
 fetchIt();

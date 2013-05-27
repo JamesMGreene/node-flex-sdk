@@ -1,11 +1,11 @@
 {
-  "name": "flex",
+  "name": "flex-sdk",
   "description": "A Node.js module to download and \"install\" the latest open source Apache/Adobe Flex SDK.",
-  "version": "4.9.1",
+  "version": "3.0.0",
   "flexSdk": {
-    "url": "http://www.us.apache.org/dist/flex/4.9.1/binaries/apache-flex-sdk-4.9.1-bin.zip"
+    "url": "http://fpdownload.adobe.com/pub/flex/sdk/builds/flex3/flex_sdk_3.0.0.477A_mpl.zip"
   },
-  "homepage": "https://github.com/JamesMGreene/node-flex",
+  "homepage": "https://github.com/JamesMGreene/node-flex-sdk",
   "author": {
     "name": "James M. Greene",
     "email": "james.m.greene@gmail.com",
@@ -13,15 +13,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/JamesMGreene/node-flex.git"
+    "url": "git://github.com/JamesMGreene/node-flex-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/JamesMGreene/node-flex/issues"
+    "url": "https://github.com/JamesMGreene/node-flex-sdk/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/JamesMGreene/node-flex/blob/master/LICENSE-MIT"
+      "url": "https://github.com/JamesMGreene/node-flex-sdk/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {
@@ -36,13 +36,16 @@
     "test": "grunt travis --verbose"
   },
   "dependencies": {
-    "rimraf": "~2.0.2",
-    "unzip": "~0.1.0"
+    "rimraf": "~2.1.4",
+    "mkdirp": "~0.3.5",
+    "adm-zip": "~0.4.3",
+    "dos2unix": "~1.0.2",
+    "ncp": "~0.4.2"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-jshint": "~0.4.3",
     "grunt-contrib-nodeunit": "~0.1.2",
-    "grunt": "~0.4.0"
+    "grunt": "~0.4.1"
   },
   "keywords": [
     "download",

@@ -53,8 +53,9 @@ module.exports = {
       done();
     },
     testIt: function(test) {
-      test.expect(4);
+      test.expect(8);
 
+      var executable = flexSdk.bin.mxmlc;
       var targetSource = path.join(__dirname, 'testData', 'testApp.as');
       var targetBinary = path.join(__dirname, 'testData', 'testApp.swf');
 
@@ -63,16 +64,29 @@ module.exports = {
         targetSource
       ];
 
-      childProcess.execFile(flexSdk.bin.mxmlc, childArgs, function(err, stdout, stderr) {
+      // Hack for non-Windows boxes
+      if (process.platform !== 'win32') {
+        childArgs.unshift(executable);
+        executable = '/bin/sh';
+      }
+
+      test.ok(flexSdk.bin.mxmlc, 'should have a path for `mxmlc`');
+      test.strictEqual(fs.existsSync(flexSdk.bin.mxmlc), true, '`mxmlc` should exist at the expected path');
+      test.strictEqual(fs.existsSync(targetSource), true, 'the target source file should exist');
+
+      childProcess.execFile(executable, childArgs, function(err, stdout, stderr) {
+        test.equal(err, null, 'should not throw an error while executing the child process');
+
         var stdoutLower = stdout.toLowerCase();
         var stderrLower = stderr.toLowerCase();
 
         var noFailures = stdoutLower.indexOf('fail') === -1 && stderrLower.indexOf('fail') === -1;
         var noErrors = stdoutLower.indexOf('error') === -1 && stderrLower.indexOf('error') === -1;
+
         var containsSwfPath;
-        // Ignore case for Windows
+        // Ignore case (and slashes) for Windows
         if (process.platform === 'win32') {
-          containsSwfPath = stdoutLower.indexOf(targetBinary.toLowerCase()) !== -1;
+          containsSwfPath = stdoutLower.replace(/\\/gi, '/').indexOf(targetBinary.toLowerCase().replace(/\\/gi, '/')) !== -1;
         }
         else {
           containsSwfPath = stdout.indexOf(targetBinary) !== -1;
@@ -88,7 +102,7 @@ module.exports = {
     }
   },
 
-  testCompileFailure: {
+  testCompileFailureDueToSynaxError: {
     setUp: function(done) {
       // Delete the binary
       var targetBinary = path.join(__dirname, 'testData', 'errorApp.swf');
@@ -102,8 +116,9 @@ module.exports = {
       done();
     },
     testIt: function(test) {
-      test.expect(3);
+      test.expect(7);
 
+      var executable = flexSdk.bin.mxmlc;
       var targetSource = path.join(__dirname, 'testData', 'errorApp.as');
       var targetBinary = path.join(__dirname, 'testData', 'errorApp.swf');
 
@@ -111,8 +126,20 @@ module.exports = {
         '+configname=air',
         targetSource
       ];
+      
+      // Hack for non-Windows boxes
+      if (process.platform !== 'win32') {
+        childArgs.unshift(executable);
+        executable = '/bin/sh';
+      }
 
-      childProcess.execFile(flexSdk.bin.mxmlc, childArgs, function(err, stdout, stderr) {
+      test.ok(flexSdk.bin.mxmlc, 'should have a path for `mxmlc`');
+      test.strictEqual(fs.existsSync(flexSdk.bin.mxmlc), true, '`mxmlc` should exist at the expected path');
+      test.strictEqual(fs.existsSync(targetSource), true, 'the target source file should exist');
+
+      childProcess.execFile(executable, childArgs, function(err, stdout, stderr) {
+        test.notEqual(err, null, 'should throw an error while executing the child process');
+
         var stdoutLower = stdout.toLowerCase();
         var stderrLower = stderr.toLowerCase();
 
@@ -134,5 +161,66 @@ module.exports = {
         test.done();
       });
     }
-  }  
+  },
+
+  testCompileFailureDueToMissingSource: {
+    setUp: function(done) {
+      // Delete the binary
+      var targetBinary = path.join(__dirname, 'testData', 'nonExistentApp.swf');
+      safeDelete(targetBinary);
+      done();
+    },
+    tearDown: function(done) {
+      // Delete the binary
+      var targetBinary = path.join(__dirname, 'testData', 'nonExistentApp.swf');
+      safeDelete(targetBinary);
+      done();
+    },
+    testIt: function(test) {
+      test.expect(7);
+
+      var executable = flexSdk.bin.mxmlc;
+      var targetSource = path.join(__dirname, 'testData', 'nonExistentApp.as');
+      var targetBinary = path.join(__dirname, 'testData', 'nonExistentApp.swf');
+
+      var childArgs = [
+        '+configname=air',
+        targetSource
+      ];
+      
+      // Hack for non-Windows boxes
+      if (process.platform !== 'win32') {
+        childArgs.unshift(executable);
+        executable = '/bin/sh';
+      }
+
+      test.ok(flexSdk.bin.mxmlc, 'should have a path for `mxmlc`');
+      test.strictEqual(fs.existsSync(flexSdk.bin.mxmlc), true, '`mxmlc` should exist at the expected path');
+      test.strictEqual(fs.existsSync(targetSource), false, 'the target source file should not exist');
+
+      childProcess.execFile(executable, childArgs, function(err, stdout, stderr) {
+        test.notEqual(err, null, 'should throw an error while executing the child process');
+
+        var stdoutLower = stdout.toLowerCase();
+        var stderrLower = stderr.toLowerCase();
+
+        var hadFailures = stdoutLower.indexOf('fail') !== -1 || stderrLower.indexOf('fail') !== -1;
+        var hadErrors = stdoutLower.indexOf('error') !== -1 || stderrLower.indexOf('error') !== -1;
+        var containsSwfPath;
+        // Ignore case for Windows
+        if (process.platform === 'win32') {
+          containsSwfPath = stdoutLower.indexOf(targetBinary.toLowerCase()) !== -1;
+        }
+        else {
+          containsSwfPath = stdout.indexOf(targetBinary) !== -1;
+        }
+
+        test.ok(hadFailures || hadErrors, 'should fail to compile the target with either failures or errors');
+        test.ok(!containsSwfPath, 'should not show path to output binary');
+        test.ok(!fs.existsSync(targetBinary), 'compiled output binary should not exist');
+
+        test.done();
+      });
+    }
+  }
 };

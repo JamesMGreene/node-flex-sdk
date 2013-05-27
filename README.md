@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/JamesMGreene/node-flex.png)](https://travis-ci.org/JamesMGreene/node-flex)
+[![Build Status](https://travis-ci.org/JamesMGreene/node-flex-sdk.png)](https://travis-ci.org/JamesMGreene/node-flex-sdk)
 
-# flex
+# flex-sdk
 
 An NPM wrapper for the [Apache Flex SDK][flex/apache/site] / [Adobe Flex SDK][flex/adobe/site].
 
@@ -8,13 +8,13 @@ An NPM wrapper for the [Apache Flex SDK][flex/apache/site] / [Adobe Flex SDK][fl
 ## Building and Installing
 
 ```shell
-npm install flex
+npm install flex-sdk
 ```
 
 Or grab the source and
 
 ```shell
-node ./install.js
+node install .
 ```
 
 What this is really doing is just grabbing a particular "blessed" (by this
@@ -47,14 +47,14 @@ The package exports an object contains:
    "bin" directory of the Flex SDK (e.g. `flexSdk.bin.mxmlc` will provide the
    path to the `mxmlc` executable).
  - a `refresh` function if you ever need to refresh the `bin` object (e.g. if
-   you have an existing `flex` module reference object but then downloaded a
+   you have an existing `flex-sdk` module reference object but then downloaded a
    new Flex SDK).
 
 Below is an example of using this package via node.
 
 ```js
 var childProcess = require('child_process');
-var flexSdk = require('flex');
+var flexSdk = require('flex-sdk');
 var binPath = flexSdk.bin.mxmlc;
 
 var childArgs = [
@@ -73,7 +73,7 @@ The NPM package version tracks the version of the Flex SDK that will be installe
 with an additional build number that is used for revisions to the installer
 when necessary.
 
-As such, `3.6.0`, `3.6.0+1`, and `3.6.0+2` will all install Flex v3.6.0 but each
+As such, `3.6.0`, `3.6.0+1`, and `3.6.0+2` will all install Flex SDK v3.6.0 but each
 has newer changes to the installer than the previous.
 
 
@@ -90,37 +90,37 @@ using [Grunt][grunt/site].
 
 
 ## Release History
- - 4.9.1: Published to NPM on 2013-03-04.
+ - 4.9.1: Published to NPM on 2013-05-27.
     - Release targeting Apache Flex SDK v4.9.1.
- - 4.9.0: Published to NPM on 2013-03-04.
+ - 4.9.0: Published to NPM on 2013-05-27.
     - Release targeting Apache Flex SDK v4.9.0.
- - 4.6.0: Published to NPM on 2013-03-04.
+ - 4.6.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v4.6.0.
- - 4.5.1: Published to NPM on 2013-03-04.
+ - 4.5.1: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v4.5.1.
- - 4.5.0: Published to NPM on 2013-03-04.
+ - 4.5.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v4.5.0.
- - 4.1.0: Published to NPM on 2013-03-04.
+ - 4.1.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v4.1.0.
- - 4.0.0: Published to NPM on 2013-03-04.
+ - 4.0.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v4.0.0.
- - 3.6.0: Published to NPM on 2013-03-04.
+ - 3.6.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.6.0.
- - 3.5.0: Published to NPM on 2013-03-04.
+ - 3.5.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.5.0.
- - 3.4.1: Published to NPM on 2013-03-04.
+ - 3.4.1: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.4.1.
- - 3.4.0: Published to NPM on 2013-03-04.
+ - 3.4.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.4.0.
- - 3.3.0: Published to NPM on 2013-03-04.
+ - 3.3.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.3.0.
- - 3.2.0: Published to NPM on 2013-03-04.
+ - 3.2.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.2.0.
- - 3.1.0: Published to NPM on 2013-03-04.
+ - 3.1.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.1.0.
- - 3.0.1: Published to NPM on 2013-03-04.
+ - 3.0.1: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.0.1.
- - 3.0.0: Published to NPM on 2013-03-04.
+ - 3.0.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.0.0.
 
 
