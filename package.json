@@ -32,7 +32,7 @@
     "mxmlc": "./bin/mxmlc"
   },
   "scripts": {
-    "install": "node install.js",
+    "prepublish": "node prepublish.js",
     "test": "grunt travis --verbose"
   },
   "dependencies": {

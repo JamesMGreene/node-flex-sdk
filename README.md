@@ -14,7 +14,7 @@ npm install flex-sdk
 Or grab the source and
 
 ```shell
-node install .
+npm install .
 ```
 
 What this is really doing is just grabbing a particular "blessed" (by this

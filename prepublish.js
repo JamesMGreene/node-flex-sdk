@@ -63,11 +63,8 @@ function getOptions() {
   return downloadUrlParts;
 }
 
-function fixLineEndings(err) {
-  if (err) {
-    console.error('Error extracting archive:\n' + err);
-    process.exit(1);
-  }
+function fixLineEndings() {
+  console.log('Fixing line endings with the `dos2unix` Node module...');
 
   // Convert all DOS line endings (CrLf) to UNIX line endings (Lf)
   var globOptions = {
@@ -103,14 +100,15 @@ function fixLineEndings(err) {
         fs.writeFileSync(path.join(__dirname, 'install.log'), JSON.stringify(errors, null, "  "));
         console.error('There were errors during the dos2unix process. Check "install.log" for more details!');
       }
-      finishIt(stats);
+      console.log('dos2unix conversion stats: ' + JSON.stringify(stats));
+
+      // Next!
+      finishIt();
     });
   dos2unix.process(['**/*']);
 }
 
-function finishIt(stats) {
-  console.log('dos2unix conversion stats: ' + JSON.stringify(stats));
-
+function finishIt() {
   if (fs.existsSync(libPath)) {
     rimraf(libPath);
   }
@@ -154,14 +152,14 @@ function finishIt(stats) {
         });
       }
 
-      // Declare victory!
+      // VICTORY!!!
       console.log('SUCCESS! The Flex SDK binaries are available at:\n  ' + flexSdk.binDir);
 
       if (fs.existsSync(tmpExtractionsPath)) {
         rimrafAsync(tmpExtractionsPath, function(err) {
           if (err) {
             console.log('\nWARNING: Could not delete the temporary directory but that is OK.\n' +
-              'The next `npm install flex-sdk` should take care of that!\n' +
+              'The next `npm prepublish` should take care of that!\n' +
               'Root cause: ' + err);
           }
         });
@@ -178,44 +176,47 @@ function extractIt() {
   }
   mkdirp(tmpExtractionsPath);
 
-  var err;
   try {
+    console.log('Exploding ZIP: ' + downloadedFile);
     var zip = new AdmZip(downloadedFile);
     zip.extractAllTo(tmpExtractionsPath, true);
   
     // Delete the ZIP file - Don't do this anymore as we preferred to leverage existing downloaded copies!
     //fs.unlinkSync(downloadedFile);
-  }
-  catch (e) {
-    err = e;
-  }
 
-  fixLineEndings(err);
+    // Next!
+    fixLineEndings();
+  }
+  catch (err) {
+    console.error('Died in a nasty ZIP explosion!\n' + err);
+    process.exit(1);
+  }
 }
 
 function fetchIt() {
   // Check if we already have the right ZIP and if it's the correct size
   if (fs.existsSync(downloadedFile)) {
-    console.log('It appears that the desired ZIP file is already downloaded. Verifying file size...');
+    console.log('It appears that the desired ZIP file is already downloaded.\nVerifying file size...');
     var localFileSize = parseInt(fs.statSync(downloadedFile).size, 10);
     var opts = getOptions();
     opts.method = 'HEAD';
     var req = http.request(opts, function(res) {
       // This might not work if the remote content is served GZIP-ed
       var remoteFileSize = parseInt(res.headers['content-length'] || -1, 10);
+
       if (localFileSize === remoteFileSize) {
-        console.log('Woohoo, the local file size matched the remote file size (both: ' + localFileSize + ')! Skipping download.');
-        extractIt();
+        console.log('Woohoo, the local file size matched the remote file size (both: ' + localFileSize + ')!\nSkipping download.');
+        extractIt();  // Next!
       }
       else {
-        console.log('Darn, the local file size (' + localFileSize + ') did not match the remote file size (' + remoteFileSize + '). Proceeding to download...');
-        downloadIt();
+        console.log('Darn, the local file size (' + localFileSize + ') did not match the remote file size (' + remoteFileSize + ').\nProceeding to download...');
+        downloadIt();  // Next!
       }
     });
     req.end();
   }
   else {
-    downloadIt();
+    downloadIt();  // Next!
   }
 }
 
@@ -244,7 +245,7 @@ function downloadIt() {
   function onEnd() {
     console.log('Received ' + Math.floor(count / 1024) + 'KB total!');
     fs.closeSync(outFile);
-    extractIt();
+    extractIt();  // Next!
   }
 
   function onResponse(response) {
@@ -266,4 +267,5 @@ function downloadIt() {
   console.log('Requesting ' + downloadUrl);
 }
 
+// Go!
 fetchIt();
