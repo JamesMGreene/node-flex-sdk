@@ -26,6 +26,14 @@ Linux based platforms (as identified by Node.js), and Windows.  If you
 spot any platform weirdnesses, let me know or send a patch.
 
 
+## External Dependencies
+
+If you intend to _use_ this module after it is installed, almost all of the Flex
+SDK binary/executable files have an implicit dependency on Java being installed
+on the system _and_ that it is available in the `PATH` such that it can be
+invoked just by typing the command `java`.
+
+
 ## Running
 
 ```shell
