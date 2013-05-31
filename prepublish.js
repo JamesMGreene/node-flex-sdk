@@ -68,14 +68,15 @@ function fixLineEndings() {
   console.log('Fixing line endings with the `dos2unix` Node module...');
 
   // Convert all DOS line endings (CrLf) to UNIX line endings (Lf)
-  var globOptions = {
+  var d2uOptions = {
     glob: {
       cwd: tmpExtractionsPath
-    }
+    },
+    maxConcurrency: 100  /* Only open a max of 100 files at once */
   };
   var conversionEndedAlready = false;
   var errors = [];
-  var dos2unix = new D2UConverter(globOptions)
+  var dos2unix = new D2UConverter(d2uOptions)
     .on('convert.error', function(err) {
       err.type = 'convert.error';
       errors.push(err);
@@ -97,9 +98,9 @@ function fixLineEndings() {
     })
     .on('end', function(stats) {
       conversionEndedAlready = true;
-      if (errors.length) {
-        fs.writeFileSync(path.join(__dirname, 'install.log'), JSON.stringify(errors, null, "  "));
-        console.error('There were errors during the dos2unix process. Check "install.log" for more details!');
+      if (errors.length || stats.error > 0) {
+        fs.writeFileSync(path.join(__dirname, 'prepublish.log'), JSON.stringify(errors, null, "  "));
+        console.error('There were errors during the dos2unix process. Check "prepublish.log" for more details!');
       }
       console.log('dos2unix conversion stats: ' + JSON.stringify(stats));
 
