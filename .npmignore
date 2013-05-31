@@ -8,6 +8,7 @@
 npm-debug.log
 prepublish.log
 .gitignore
+.gitattributes
 .jshintrc
 .npmignore
 .travis.yml
@@ -22,3 +23,4 @@ results
 node_modules
 test
 tests
+

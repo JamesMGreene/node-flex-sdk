@@ -84,6 +84,8 @@ when necessary.
 As such, `3.6.0`, `3.6.0+1`, and `3.6.0+2` will all install Flex SDK v3.6.0 but each
 has newer changes to the installer than the previous.
 
+For the full list of available versions, see [FlexSDKs.md][flex/sdk-versions].
+
 
 ## Purpose
 This is an _NPM wrapper_ and can be used to make the various binary executables 
@@ -98,20 +100,22 @@ using [Grunt][grunt/site].
 
 
 ## Release History
- - 4.9.1: Published to NPM on 2013-05-27.
+ - 4.9.1: Published to NPM on 2013-05-31.
     - Release targeting Apache Flex SDK v4.9.1.
- - 4.9.0: Published to NPM on 2013-05-27.
+ - 4.9.0: Published to NPM on 2013-05-31.
     - Release targeting Apache Flex SDK v4.9.0.
- - 4.6.0: Published to NPM on 2013-05-27.
+ - 4.6.0: Published to NPM on 2013-05-31.
     - Release targeting Adobe Flex SDK v4.6.0.
- - 4.5.1: Published to NPM on 2013-05-27.
+ - 4.5.1: Published to NPM on 2013-05-31.
     - Release targeting Adobe Flex SDK v4.5.1.
- - 4.5.0: Published to NPM on 2013-05-27.
+ - 4.5.0: Published to NPM on 2013-05-31.
     - Release targeting Adobe Flex SDK v4.5.0.
- - 4.1.0: Published to NPM on 2013-05-27.
+ - 4.1.0: Published to NPM on 2013-05-31.
     - Release targeting Adobe Flex SDK v4.1.0.
- - 4.0.0: Published to NPM on 2013-05-27.
-    - Release targeting Adobe Flex SDK v4.0.0.
+ - 4.0.0: Published to NPM on 2013-05-31.
+    - Release targeting Adobe Flex SDK v4.0.0 with the AIR runtime specifically _**excluded**_.
+ - 4.0.0-air: Published to NPM on 2013-05-31.
+    - Release targeting Adobe Flex SDK v4.0.0 _with_ the AIR runtime included (which is the default for this SDK version).
  - 3.6.0: Published to NPM on 2013-05-27.
     - Release targeting Adobe Flex SDK v3.6.0.
  - 3.5.0: Published to NPM on 2013-05-27.
@@ -141,4 +145,5 @@ Licensed under the MIT license.
 [flex/apache/site]: http://flex.apache.org/index.html "Apache Flex"
 [flex/adobe/site]: http://www.adobe.com/devnet/flex.html "Adobe Flex"
 [flex/adobe/compiler-options]: http://livedocs.adobe.com/flex/3/html/help.html?content=compilers_14.html "mxmlc command line options"
+[flex/sdk-versions]: https://github.com/JamesMGreene/node-flex-sdk/blob/master/FlexSDKs.md "Flex SDK version list"
 [grunt/site]: (http://gruntjs.com/) "Grunt"
