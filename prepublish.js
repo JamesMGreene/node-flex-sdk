@@ -172,7 +172,7 @@ function finishIt() {
         rimrafAsync(tmpExtractionsPath, function(err) {
           if (err) {
             console.log('\nWARNING: Could not delete the temporary directory but that is OK.\n' +
-              'The next `npm prepublish` should take care of that!\n' +
+              'The next `npm publish` or `npm install .` should take care of that!\n' +
               'Root cause: ' + err);
           }
         });
