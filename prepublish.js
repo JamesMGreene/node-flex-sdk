@@ -126,7 +126,7 @@ function finishIt() {
     rimraf(libPath);
   }
   mkdirp(libPath);
-
+  
   // Move the contents, if there are files left
   copyR(tmpExtractionsPath, libPath, function(err) {
     // For isolating extraction problems
@@ -192,9 +192,23 @@ function extractIt() {
   try {
     console.log('Exploding ZIP: ' + downloadedFile);
     var zip = new AdmZip(downloadedFile);
-    zip.extractAllTo(tmpExtractionsPath, true);
 
-    // Delete the ZIP file - Don't do this anymore as we preferred to leverage existing downloaded copies!
+    // Specific to v4.0.0 (non-AIR version) but not v4.0.0-air
+    // Do NOT extract the 'runtimes' folder
+    zip.getEntries().map(function(entry) {
+      return entry.entryName;
+    }).filter(function(entryName) {
+      // Get just the entries whose `entryName` does NOT start with "runtimes/"
+      return !( /^runtimes[\/\\]/i.test(entryName) );
+    }).sort(function(a, b) {
+      return (a > b) ? 1 : ((a < b) ? -1 : 0);
+    }).forEach(function(entryName) {
+      //console.log('Extracting: "' + entryName + '"');
+      zip.extractEntryTo(entryName, tmpExtractionsPath, true, true);
+    });
+    //zip.extractAllTo(tmpExtractionsPath, true);
+
+    // Delete the ZIP file - Don't do this anymore as we prefer to leverage existing downloaded copies!
     //fs.unlinkSync(downloadedFile);
 
     // Next!
