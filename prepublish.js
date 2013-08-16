@@ -1,6 +1,6 @@
 /*
- * flex
- * https://github.com/JamesMGreene/node-flex
+ * flex-sdk
+ * https://github.com/JamesMGreene/node-flex-sdk
  *
  * Copyright (c) 2013 James M. Greene
  * Licensed under the MIT license.
