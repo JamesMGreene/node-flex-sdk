@@ -1,9 +1,9 @@
 {
   "name": "flex-sdk",
   "description": "A Node.js module to download and \"install\" the latest open source Apache/Adobe Flex SDK.",
-  "version": "4.9.1",
+  "version": "4.8.0",
   "flexSdk": {
-    "url": "http://www.us.apache.org/dist/flex/4.9.1/binaries/apache-flex-sdk-4.9.1-bin.zip"
+    "url": "https://archive.apache.org/dist/incubator/flex/4.8.0-incubating/binaries/apache-flex-sdk-4.8.0-incubating-bin.zip"
   },
   "homepage": "https://github.com/JamesMGreene/node-flex-sdk",
   "author": {
@@ -33,6 +33,7 @@
   },
   "scripts": {
     "prepublish": "node prepublish.js",
+    "install": "node install.js",
     "test": "grunt travis --verbose"
   },
   "dependencies": {

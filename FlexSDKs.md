@@ -2,18 +2,19 @@
 The following are the URLs used to download the open sourced
 Flex SDK for each version number of Apache/Adobe Flex.
 
-## Apache Flex v4.9.x
+## Apache Flex SDK v4.8.x+
  - **4.9.1**: http://www.us.apache.org/dist/flex/4.9.1/binaries/apache-flex-sdk-4.9.1-bin.zip
- - **4.9.0**: http://www.us.apache.org/dist/flex/4.9.0/binaries/apache-flex-sdk-4.9.0-bin.zip
+ - **4.9.0**: https://archive.apache.org/dist/incubator/flex/4.9.0/binaries/apache-flex-sdk-4.9.0-bin.zip
+ - **4.8.0**: https://archive.apache.org/dist/incubator/flex/4.8.0-incubating/binaries/apache-flex-sdk-4.8.0-incubating-bin.zip
 
-## Adobe Flex v4.x.x
+## Adobe Flex SDK v4.x.x
  - **4.6.0**: http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4.6/flex_sdk_4.6.0.23201_mpl.zip
  - **4.5.1**: http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4.5/flex_sdk_4.5.1.21328A_mpl.zip
  - **4.5.0**: http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4.5/flex_sdk_4.5.0.20967A_mpl.zip
  - **4.1.0**: http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4/flex_sdk_4.1.0.16076A_mpl.zip
  - **4.0.0**: http://fpdownload.adobe.com/pub/flex/sdk/builds/flex4/flex_sdk_4.0.0.14159A_mpl.zip
 
-## Adobe Flex v3.x.x
+## Adobe Flex SDK v3.x.x
  - **3.6.0:** http://fpdownload.adobe.com/pub/flex/sdk/builds/flex3/flex_sdk_3.6.0.16995A_mpl.zip
  - **3.5.0:** http://fpdownload.adobe.com/pub/flex/sdk/builds/flex3/flex_sdk_3.5.0.12683B_mpl.zip
  - **3.4.1:** http://fpdownload.adobe.com/pub/flex/sdk/builds/flex3/flex_sdk_3.4.1.10084A_mpl.zip

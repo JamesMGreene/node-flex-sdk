@@ -75,7 +75,7 @@ module.exports = {
       test.strictEqual(fs.existsSync(targetSource), true, 'the target source file should exist');
 
       childProcess.execFile(executable, childArgs, function(err, stdout, stderr) {
-        test.equal(err, null, 'should not throw an error while executing the child process');
+        test.equal(err, null, 'should not throw an error while executing the child process' + (err || ''));
 
         var stdoutLower = stdout.toLowerCase();
         var stderrLower = stderr.toLowerCase();
