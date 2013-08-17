@@ -33,6 +33,7 @@
   },
   "scripts": {
     "prepublish": "node prepublish.js",
+    "install": "node install.js",
     "test": "grunt travis --verbose"
   },
   "dependencies": {
