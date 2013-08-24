@@ -13,6 +13,7 @@
 'use strict';
 
 var flexSdk = require('./lib/flex');
+var fs = require('fs');
 
 // Ensure that the binaries are user-executable (i.e. Linux shell scripts if published from Windows)
 if (process.platform !== 'win32') {
