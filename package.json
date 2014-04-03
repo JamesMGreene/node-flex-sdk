@@ -1,7 +1,7 @@
 {
   "name": "flex-sdk",
   "description": "A Node.js module to download and \"install\" the latest open source Apache/Adobe Flex SDK.",
-  "version": "3.0.0-2",
+  "version": "3.0.0-3",
   "flexSdk": {
     "url": "http://fpdownload.adobe.com/pub/flex/sdk/builds/flex3/flex_sdk_3.0.0.477A_mpl.zip"
   },
@@ -46,9 +46,8 @@
     "download": "^0.1.12",
     "rimraf": "^2.2.6",
     "mkdirp": "^0.3.5",
-    "adm-zip": "^0.4.4",
     "dos2unix": "^1.1.1",
-    "ncp": "^0.4.2"
+    "async": "^0.6.2"
   },
   "keywords": [
     "download",
