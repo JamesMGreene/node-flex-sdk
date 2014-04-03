@@ -1,9 +1,9 @@
 {
   "name": "flex-sdk",
   "description": "A Node.js module to download and \"install\" the latest open source Apache/Adobe Flex SDK.",
-  "version": "4.8.0",
+  "version": "3.0.0-0",
   "flexSdk": {
-    "url": "http://archive.apache.org/dist/incubator/flex/4.8.0-incubating/binaries/apache-flex-sdk-4.8.0-incubating-bin.zip"
+    "url": "http://fpdownload.adobe.com/pub/flex/sdk/builds/flex3/flex_sdk_3.0.0.477A_mpl.zip"
   },
   "homepage": "https://github.com/JamesMGreene/node-flex-sdk",
   "author": {
@@ -37,16 +37,18 @@
     "test": "grunt travis --verbose"
   },
   "dependencies": {
-    "rimraf": "~2.2.2",
-    "mkdirp": "~0.3.5",
-    "adm-zip": "~0.4.3",
-    "dos2unix": "~1.1.1",
-    "ncp": "~0.4.2"
+    "playerglobal-latest": "^0.1.3"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "~0.6.3",
-    "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt": "~0.4.1"
+    "grunt-contrib-jshint": "^0.6.5",
+    "grunt-contrib-nodeunit": "^0.2.2",
+    "grunt": "^0.4.4",
+    "download": "^0.1.12",
+    "rimraf": "^2.2.6",
+    "mkdirp": "^0.3.5",
+    "adm-zip": "^0.4.4",
+    "dos2unix": "^1.1.1",
+    "ncp": "^0.4.2"
   },
   "keywords": [
     "download",

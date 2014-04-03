@@ -72,7 +72,7 @@ var childArgs = [
 
 childProcess.execFile(binPath, childArgs, function(err, stdout, stderr) {
   // handle results
-})
+});
 ```
 
 
@@ -81,7 +81,7 @@ The NPM package version tracks the version of the Flex SDK that will be installe
 with an additional build number that is used for revisions to the installer
 when necessary.
 
-As such, `3.6.0`, `3.6.0+1`, and `3.6.0+2` will all install Flex SDK v3.6.0 but each
+As such, `4.6.0-0`, `4.6.0-1`, and `4.6.0-2` will all install Flex SDK v4.6.0 but each
 has newer changes to the installer than the previous.
 
 For the full list of available versions, see [FlexSDKs.md][flex/sdk-versions].
@@ -100,44 +100,38 @@ using [Grunt][grunt/site].
 
 
 ## Release History
- - 4.9.1: Published to NPM on 2013-05-31.
-    - Release targeting Apache Flex SDK v4.9.1.
- - 4.9.0: Published to NPM on 2013-05-31.
-    - Release targeting Apache Flex SDK v4.9.0.
- - 4.6.0: Published to NPM on 2013-05-31.
+ - 4.6.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v4.6.0.
- - 4.5.1: Published to NPM on 2013-05-31.
+ - 4.5.1-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v4.5.1.
- - 4.5.0: Published to NPM on 2013-05-31.
+ - 4.5.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v4.5.0.
- - 4.1.0: Published to NPM on 2013-05-31.
+ - 4.1.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v4.1.0.
- - 4.0.0: Published to NPM on 2013-05-31.
-    - Release targeting Adobe Flex SDK v4.0.0 with the AIR runtime specifically _**excluded**_.
- - 4.0.0-air: Published to NPM on 2013-05-31.
-    - Release targeting Adobe Flex SDK v4.0.0 _with_ the AIR runtime included (which is the default for this SDK version).
- - 3.6.0: Published to NPM on 2013-05-27.
+ - 4.0.0-0: Published to NPM on 2014-04-02.
+    - Release targeting Adobe Flex SDK v4.0.0, with the AIR runtime specifically _**excluded**_.
+ - 3.6.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v3.6.0.
- - 3.5.0: Published to NPM on 2013-05-27.
+ - 3.5.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v3.5.0.
- - 3.4.1: Published to NPM on 2013-05-27.
+ - 3.4.1-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v3.4.1.
- - 3.4.0: Published to NPM on 2013-05-27.
+ - 3.4.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v3.4.0.
- - 3.3.0: Published to NPM on 2013-05-27.
+ - 3.3.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v3.3.0.
- - 3.2.0: Published to NPM on 2013-05-27.
+ - 3.2.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v3.2.0.
- - 3.1.0: Published to NPM on 2013-05-27.
+ - 3.1.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v3.1.0.
- - 3.0.1: Published to NPM on 2013-05-27.
+ - 3.0.1-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v3.0.1.
- - 3.0.0: Published to NPM on 2013-05-27.
+ - 3.0.0-0: Published to NPM on 2014-04-02.
     - Release targeting Adobe Flex SDK v3.0.0.
 
 
 ## License
-Copyright (c) 2013 James M. Greene  
+Copyright (c) 2014 James M. Greene  
 Licensed under the MIT license.
 
 

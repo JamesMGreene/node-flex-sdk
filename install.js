@@ -12,6 +12,7 @@
 
 'use strict';
 
+var playerGlobal = require('playerglobal-latest');
 var flexSdk = require('./lib/flex');
 var fs = require('fs');
 
@@ -28,4 +29,10 @@ if (process.platform !== 'win32') {
   });
 }
 
-process.exit(0);
+// Copy all of the Flash API libraries into the Flex SDK folder
+playerGlobal.install(flexSdk.FLEX_HOME, function(err) {
+  if (err) {
+    console.error('Failed to install the latest "playerglobal.swc" library collection!\nError: ' + err);
+  }
+  process.exit(err ? 1 : 0);
+});

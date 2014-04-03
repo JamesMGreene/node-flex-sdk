@@ -89,8 +89,8 @@ function fixLineEndings() {
       console.error('Critical error while fixing line endings:\n' + (err.stack || err));
       if (!conversionEndedAlready) {
         if (errors.length) {
-          fs.writeFileSync(path.join(__dirname, 'install.log'), JSON.stringify(errors, null, "  "));
-          console.error('There were errors during the dos2unix process. Check "install.log" for more details!');
+          fs.writeFileSync(path.join(__dirname, 'prepublish.log'), JSON.stringify(errors, null, "  "));
+          console.error('There were errors during the dos2unix process. Check "prepublish.log" for more details!');
         }
         console.error('Exiting prematurely...');
         process.exit(1);
@@ -152,29 +152,60 @@ function finishIt() {
       // Start utilizing the API by refreshing its binary cache
       flexSdk.refresh();
 
-      // Ensure that the binaries are user-executable (problems with unzip library)
-      if (process.platform !== 'win32') {
-        Object.keys(flexSdk.bin).forEach(function(binKey) {
-          var binaryPath = flexSdk.bin[binKey];
-          var stat = fs.statSync(binaryPath);
-          // 64 === 0100 (no octal literal in strict mode)
-          if (!(stat.mode & 64)) {
-            console.log('Fixing file permissions for: ' + binaryPath);
-            fs.chmodSync(binaryPath, '755');
+      // Cleanup: RegExp stuff for finding and replacing
+      var javaInvocationRegex = /^java .*\$VMARGS/m;
+      var javaInvocationMatchingRegex = /^(java .*\$VMARGS)/mg;
+      var javaInvocationReplacement = [
+        'D32=""',
+        'D32_OVERRIDE=""',
+        'IS_OSX="`uname | grep -i Darwin`"',
+        'IS_JAVA64="`java -version 2>&1 | grep -i 64-Bit`"',
+        'JAVA_VERSION="`java -version 2>&1 | awk -F \'[ ".]+\' \'NR==1 {print \$3 "." \$4}\'`"',
+        'if [ "\$IS_OSX" != "" -a "\$HOSTTYPE" = "x86_64" -a "\$IS_JAVA64" != "" -a "\$JAVA_VERSION" = "1.6" ]; then',
+        '  D32_OVERRIDE="-d32"',
+        'fi',
+        'VMARGS="\$VMARGS \$D32_OVERRIDE"',
+        '',
+        '$1'
+      ].join('\n');
+
+
+      // Do the cleanup!
+      Object.keys(flexSdk.bin).forEach(function(binKey) {
+        var binaryPath = flexSdk.bin[binKey];
+
+        // Ensure that the Bash scripts are updated to work with 64-bit JREs on Mac
+        var ext = binaryPath.slice(-4).toLowerCase();
+        if (ext !== '.bat' && ext !== '.exe') {
+          var contents = fs.readFileSync(binaryPath, { encoding: 'utf8' });
+          // Rewrite any Java invocations to ensure they work on Mac
+          if (contents.match(javaInvocationRegex)) {
+            console.log('Fixing Java invocation for MacOSX in: ' + binaryPath);
+            var cleanedContents = contents.replace(javaInvocationMatchingRegex, javaInvocationReplacement);
+            fs.writeFileSync(binaryPath, cleanedContents, { encoding: 'utf8', mode: '755' });
           }
-        });
-      }
+        }
+
+        // Ensure that the binaries are user-executable (problems with unzip library)
+        var stat = fs.statSync(binaryPath);
+        // 64 === 0100 (no octal literal in strict mode)
+        if (!(stat.mode & 64)) {
+          console.log('Fixing file permissions for: ' + binaryPath);
+          fs.chmodSync(binaryPath, '755');
+        }
+      });
 
       // VICTORY!!!
-      console.log('SUCCESS! The Flex SDK binaries are available at:\n  ' + flexSdk.binDir);
+      console.log('SUCCESS! The Flex SDK binaries are available at:\n  ' + flexSdk.binDir + '\n');
 
       if (fs.existsSync(tmpExtractionsPath)) {
         rimrafAsync(tmpExtractionsPath, function(err) {
           if (err) {
-            console.log('\nWARNING: Could not delete the temporary directory but that is OK.\n' +
+            console.log('WARNING: Could not delete the temporary directory but that is OK.\n' +
               'The next `npm publish` or `npm install .` should take care of that!\n' +
-              'Root cause: ' + err);
+              'Root cause: ' + err + '\n');
           }
+          process.exit(err ? 1 : 0);
         });
       }
     });
