@@ -100,34 +100,20 @@ using [Grunt][grunt/site].
 
 
 ## Release History
- - 4.6.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v4.6.0.
- - 4.5.1-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v4.5.1.
- - 4.5.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v4.5.0.
- - 4.1.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v4.1.0.
- - 4.0.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v4.0.0, with the AIR runtime specifically _**excluded**_.
- - 3.6.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v3.6.0.
- - 3.5.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v3.5.0.
- - 3.4.1-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v3.4.1.
- - 3.4.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v3.4.0.
- - 3.3.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v3.3.0.
- - 3.2.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v3.2.0.
- - 3.1.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v3.1.0.
- - 3.0.1-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v3.0.1.
- - 3.0.0-0: Published to NPM on 2014-04-02.
-    - Release targeting Adobe Flex SDK v3.0.0.
+ - Adobe Flex SDK v4.6.0 &rarr; `npm install flex-sdk@~4.6.0`
+ - Adobe Flex SDK v4.5.1 &rarr; `npm install flex-sdk@~4.5.1`
+ - Adobe Flex SDK v4.5.0 &rarr; `npm install flex-sdk@~4.5.0`
+ - Adobe Flex SDK v4.1.0 &rarr; `npm install flex-sdk@~4.1.0`
+ - Adobe Flex SDK v4.0.0 &rarr; `npm install flex-sdk@~4.0.0`
+ - Adobe Flex SDK v3.6.0 &rarr; `npm install flex-sdk@~3.6.0`
+ - Adobe Flex SDK v3.5.0 &rarr; `npm install flex-sdk@~3.5.0`
+ - Adobe Flex SDK v3.4.1 &rarr; `npm install flex-sdk@~3.4.1`
+ - Adobe Flex SDK v3.4.0 &rarr; `npm install flex-sdk@~3.4.0`
+ - Adobe Flex SDK v3.3.0 &rarr; `npm install flex-sdk@~3.3.0`
+ - Adobe Flex SDK v3.2.0 &rarr; `npm install flex-sdk@~3.2.0`
+ - Adobe Flex SDK v3.1.0 &rarr; `npm install flex-sdk@~3.1.0`
+ - Adobe Flex SDK v3.0.1 &rarr; `npm install flex-sdk@~3.0.1`
+ - Adobe Flex SDK v3.0.0 &rarr; `npm install flex-sdk@~3.0.0`
 
 
 ## License
