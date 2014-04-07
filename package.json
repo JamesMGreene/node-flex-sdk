@@ -1,7 +1,7 @@
 {
   "name": "flex-sdk",
   "description": "A Node.js module to download and \"install\" the latest open source Apache/Adobe Flex SDK.",
-  "version": "3.0.0-3",
+  "version": "3.0.0-4",
   "flexSdk": {
     "url": "http://fpdownload.adobe.com/pub/flex/sdk/builds/flex3/flex_sdk_3.0.0.477A_mpl.zip"
   },
@@ -32,8 +32,9 @@
     "mxmlc": "./bin/mxmlc"
   },
   "scripts": {
-    "prepublish": "node prepublish.js",
+    "prepublish": "node prepublish.js; if [ \"$npm_package_config_npm_cmd_ran\" == \"install\" ]; then npm run-script postinstall; npm config delete $npm_package_name:npm_cmd_ran; fi",
     "preinstall": "npm install playerglobal-latest",
+    "install": "npm config set $npm_package_name:npm_cmd_ran install",
     "postinstall": "node install.js",
     "test": "grunt travis --verbose"
   },

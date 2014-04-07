@@ -16,7 +16,7 @@ module.exports = function(grunt) {
       options: {
         jshintrc: true
       },
-      all: ['Gruntfile.js', 'lib/*.js', 'test/**/*.js']
+      all: ['*.js', 'lib/*.js', 'test/**/*.js']
     },
     nodeunit: {
       all: ['test/**/*_test.js']

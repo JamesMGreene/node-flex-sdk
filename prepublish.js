@@ -18,7 +18,7 @@ var path = require('path');
 fs.existsSync = fs.existsSync || path.existsSync;
 var async = require('async');
 var download = require('download');
-var rimraf = require('rimraf')
+var rimraf = require('rimraf');
 var mkdirp = require('mkdirp');
 var D2UConverter = require('dos2unix').dos2unix;
 var pkgMeta = require('./package.json');
@@ -181,11 +181,11 @@ function fixJavaInvocationsForMac(done) {
     'D32_OVERRIDE=""',
     'IS_OSX="`uname | grep -i Darwin`"',
     'IS_JAVA64="`java -version 2>&1 | grep -i 64-Bit`"',
-    'JAVA_VERSION="`java -version 2>&1 | awk -F \'[ ".]+\' \'NR==1 {print \$3 "." \$4}\'`"',
-    'if [ "\$IS_OSX" != "" -a "\$HOSTTYPE" = "x86_64" -a "\$IS_JAVA64" != "" -a "\$JAVA_VERSION" = "1.6" ]; then',
+    'JAVA_VERSION="`java -version 2>&1 | awk -F \'[ ".]+\' \'NR==1 {print $$3 "." $$4}\'`"',
+    'if [ "$$IS_OSX" != "" -a "$$HOSTTYPE" = "x86_64" -a "$$IS_JAVA64" != "" -a "$$JAVA_VERSION" = "1.6" ]; then',
     '  D32_OVERRIDE="-d32"',
     'fi',
-    'VMARGS="\$VMARGS \$D32_OVERRIDE"',
+    'VMARGS="$$VMARGS $$D32_OVERRIDE"',
     '',
     '$1'
   ].join('\n');

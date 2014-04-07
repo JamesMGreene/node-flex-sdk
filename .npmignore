@@ -24,3 +24,4 @@ node_modules
 test
 tests
 lib/flex_sdk/runtimes
+lib/flex_sdk/frameworks/libs/player/*/
