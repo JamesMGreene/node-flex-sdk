@@ -34,5 +34,8 @@ playerGlobal.install(flexSdk.FLEX_HOME, function(err) {
   if (err) {
     console.error('Failed to install the latest "playerglobal.swc" library collection!\nError: ' + err);
   }
+  else {
+    console.log('Successfully installed the latest "playerglobal.swc" library collection.');
+  }
   process.exit(err ? 1 : 0);
 });
