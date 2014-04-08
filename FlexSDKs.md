@@ -3,6 +3,8 @@ The following are the URLs used to download the open sourced
 Flex SDK for each version number of Apache/Adobe Flex.
 
 ## Apache Flex SDK v4.8.x+
+ - **4.12.0**: http://archive.apache.org/dist/flex/4.12.0/binaries/apache-flex-sdk-4.12.0-bin.zip
+ - **4.11.0**: http://archive.apache.org/dist/flex/4.11.0/binaries/apache-flex-sdk-4.11.0-bin.zip
  - **4.10.0**: http://archive.apache.org/dist/flex/4.10.0/binaries/apache-flex-sdk-4.10.0-bin.zip
  - **4.9.1**: http://archive.apache.org/dist/flex/4.9.1/binaries/apache-flex-sdk-4.9.1-bin.zip
  - **4.9.0**: http://archive.apache.org/dist/flex/4.9.0/binaries/apache-flex-sdk-4.9.0-bin.zip
