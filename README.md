@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/JamesMGreene/node-flex-sdk.png)](https://travis-ci.org/JamesMGreene/node-flex-sdk)
+[![Build Status](https://travis-ci.org/JamesMGreene/node-flex-sdk.png?branch=master)](https://travis-ci.org/JamesMGreene/node-flex-sdk)
 
 # flex-sdk
 
